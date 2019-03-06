@@ -1,0 +1,7 @@
+ga_disable.settings:
+  path: '/admin/config/development/ga_disable'
+  defaults:
+    _form: '\Drupal\ga_disable\Form\ModuleConfigurationForm'
+    _title: 'Configure Google Analytics Disable'
+  requirements:
+    _permission: 'administer site configuration'

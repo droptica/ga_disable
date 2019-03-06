@@ -1,0 +1,6 @@
+name: Google Analytics Disable
+description: Gives an opportunity tu turn off Google Analytics while testing the website.
+package: Custom
+type: module
+core: 8.x
+configure: ga_disable.settings

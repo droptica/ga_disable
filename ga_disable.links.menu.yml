@@ -1,0 +1,6 @@
+ga_disable.admin:
+  title: 'GA Disable'
+  description: 'Manage settings for Google Analytics Disable'
+  parent: system.admin_config_development
+  route_name: ga_disable.settings
+  weight: 1

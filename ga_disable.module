@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_page_attachments().
+ */
+function ga_disable_page_attachments(array &$page) {
+  // Activate only if GA ID is set.
+  $ga_id = \Drupal::config('ga_disable.settings')->get('ga_id');
+  if (empty($ga_id)) {
+    return;
+  }
+
+  $page['#attached']['library'][] = 'ga_disable/ga_disable';
+  $page['#attached']['drupalSettings']['ga_disable']['ga_id'] = $ga_id;
+}

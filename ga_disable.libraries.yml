@@ -1,0 +1,6 @@
+ga_disable:
+  version: 1.x
+  js:
+    js/ga_disable.js: {}
+  dependencies:
+    - core/drupalSettings
