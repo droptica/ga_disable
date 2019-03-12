@@ -37,6 +37,11 @@ class ModuleConfigurationForm extends ConfigFormBase {
       '#description' => $this->t('Enter the ID used by Google Analytics, like UA-1234567-8.'),
       '#default_value' => $config->get('ga_id'),
     ];
+    $form['help'] = [
+      '#type' => 'item',
+      '#title' => t('Setting the cookie'),
+      '#markup' => t('Click <a href="/ga_disable/set_cookie">here</a> to set the cookie for the session. Click <a href="/ga_disable/remove_cookie">here</a> to remove it.'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 

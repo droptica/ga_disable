@@ -5,3 +5,19 @@ ga_disable.settings:
     _title: 'Configure Google Analytics Disable'
   requirements:
     _permission: 'administer site configuration'
+
+ga_disable.set_cookie:
+  path: '/ga_disable/set_cookie'
+  defaults:
+    _controller: '\Drupal\ga_disable\Controller\CookieController::setCookie'
+    _title: 'Set opt-out cookie for GA.'
+  requirements:
+    _permission: 'access content'
+
+ga_disable.remove_cookie:
+  path: '/ga_disable/remove_cookie'
+  defaults:
+    _controller: '\Drupal\ga_disable\Controller\CookieController::removeCookie'
+    _title: 'Disable opt-out cookie for GA.'
+  requirements:
+    _permission: 'access content'
