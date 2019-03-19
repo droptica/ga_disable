@@ -1,7 +1,0 @@
-ga_disable:
-  header: true
-  version: VERSION
-  js:
-    js/ga_disable.js: { weight: -999 }
-  dependencies:
-    - core/drupalSettings

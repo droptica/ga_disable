@@ -10,6 +10,17 @@ function ga_disable_page_attachments(array &$page) {
     return;
   }
 
-  $page['#attached']['library'][] = 'ga_disable/ga_disable';
-  $page['#attached']['drupalSettings']['ga_disable']['ga_id'] = $ga_id;
+  // Add JS above all scripts.
+  $page['#attached']['html_head'][] = [
+    [
+      '#type' => 'html_tag',
+      '#weight' => -100,
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => drupal_get_path('module', 'ga_disable') . '/js/ga_disable.js',
+        'data-id' => $ga_id,
+        'id' => 'ga_disable',
+      ],
+    ], 'ga-disable-script',
+  ];
 }
