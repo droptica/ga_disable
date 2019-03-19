@@ -17,7 +17,7 @@ function ga_disable_page_attachments(array &$page) {
       '#weight' => -100,
       '#tag' => 'script',
       '#attributes' => [
-        'src' => drupal_get_path('module', 'ga_disable') . '/js/ga_disable.js',
+        'src' => base_path() . drupal_get_path('module', 'ga_disable') . '/js/ga_disable.js',
         'data-id' => $ga_id,
         'id' => 'ga_disable',
       ],
