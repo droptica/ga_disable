@@ -4,10 +4,20 @@
  * Implements hook_page_attachments().
  */
 function ga_disable_page_attachments(array &$page) {
+  $config = \Drupal::config('ga_disable.settings');
+
   // Activate only if GA ID is set.
-  $ga_id = \Drupal::config('ga_disable.settings')->get('ga_id');
+  $ga_id = $config->get('ga_id');
   if (empty($ga_id)) {
     return;
+  }
+
+  // Check if we should force the opt-out.
+  $force = '0';
+  $env = getenv('ENV');
+  $dev_environments = array_map('trim', explode("\n", $config->get('dev_environments')));
+  if (!empty($env) && in_array($env, $dev_environments)) {
+    $force = '1';
   }
 
   // Add JS above all scripts.
@@ -19,6 +29,7 @@ function ga_disable_page_attachments(array &$page) {
       '#attributes' => [
         'src' => base_path() . drupal_get_path('module', 'ga_disable') . '/js/ga_disable.js',
         'data-id' => $ga_id,
+        'data-force' => $force,
         'id' => 'ga_disable',
       ],
     ], 'ga-disable-script',
