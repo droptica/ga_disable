@@ -17,6 +17,10 @@ class CookieController extends ControllerBase {
    * @var Drupal\Core\PageCache\ResponsePolicy\KillSwitch
    */
   protected $killSwitch;
+
+  /**
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
   protected $config;
 
   /**
@@ -33,8 +37,7 @@ class CookieController extends ControllerBase {
    *
    * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
    */
-  public function __construct(KillSwitch $kill_switch)
-  {
+  public function __construct(KillSwitch $kill_switch) {
     $this->killSwitch = $kill_switch;
     $this->config = \Drupal::config('ga_disable.settings');
   }
@@ -47,10 +50,8 @@ class CookieController extends ControllerBase {
   public function setCookie() {
     $cookie_domains = array_map('trim', explode("\n", $this->config->get('cookie_domains')));
     setcookie("analytics_disable", TRUE, 0, '/');
-    if (!empty($cookie_domains)) {
-      foreach ($cookie_domains as $domain) {
-        setcookie("analytics_disable", TRUE, 0, '/', $domain);
-      }
+    foreach (array_filter($cookie_domains) as $domain) {
+      setcookie("analytics_disable", TRUE, 0, '/', $domain);
     }
     $this->messenger()->addStatus($this->t('The GA opt-out cookie has been set.'));
     $this->killSwitch->trigger();
@@ -65,13 +66,12 @@ class CookieController extends ControllerBase {
   public function removeCookie() {
     $cookie_domains = array_map('trim', explode("\n", $this->config->get('cookie_domains')));
     setcookie("analytics_disable", FALSE, time() - 3600, '/');
-    if (!empty($cookie_domains)) {
-      foreach ($cookie_domains as $domain) {
-        setcookie("analytics_disable", TRUE, time() - 3600, '/', $domain);
-      }
+    foreach (array_filter($cookie_domains) as $domain) {
+      setcookie("analytics_disable", TRUE, time() - 3600, '/', $domain);
     }
     $this->messenger()->addStatus($this->t('The GA opt-out cookie has been removed.'));
     $this->killSwitch->trigger();
     return $this->redirect('<front>');
   }
+
 }
