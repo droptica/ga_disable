@@ -63,7 +63,13 @@ class CookieController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
   public function removeCookie() {
+    $cookie_domains = array_map('trim', explode("\n", $this->config->get('cookie_domains')));
     setcookie("analytics_disable", FALSE, time() - 3600, '/');
+    if (!empty($cookie_domains)) {
+      foreach ($cookie_domains as $domain) {
+        setcookie("analytics_disable", TRUE, time() - 3600, '/', $domain);
+      }
+    }
     $this->messenger()->addStatus($this->t('The GA opt-out cookie has been removed.'));
     $this->killSwitch->trigger();
     return $this->redirect('<front>');
