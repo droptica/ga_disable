@@ -19,11 +19,6 @@ class CookieController extends ControllerBase {
   protected $killSwitch;
 
   /**
-   * @var \Drupal\Core\Config\ImmutableConfig
-   */
-  protected $config;
-
-  /**
    * @inheritdoc
    */
   public static function create(ContainerInterface $container) {
@@ -39,7 +34,6 @@ class CookieController extends ControllerBase {
    */
   public function __construct(KillSwitch $kill_switch) {
     $this->killSwitch = $kill_switch;
-    $this->config = \Drupal::config('ga_disable.settings');
   }
 
   /**
@@ -48,7 +42,7 @@ class CookieController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
   public function setCookie() {
-    $cookie_domains = array_map('trim', explode("\n", $this->config->get('cookie_domains')));
+    $cookie_domains = array_map('trim', explode("\n", $this->config('ga_disable.settings')->get('cookie_domains')));
     setcookie("analytics_disable", TRUE, 0, '/');
     foreach (array_filter($cookie_domains) as $domain) {
       setcookie("analytics_disable", TRUE, 0, '/', $domain);
@@ -64,7 +58,7 @@ class CookieController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
   public function removeCookie() {
-    $cookie_domains = array_map('trim', explode("\n", $this->config->get('cookie_domains')));
+    $cookie_domains = array_map('trim', explode("\n", $this->config('ga_disable.settings')->get('cookie_domains')));
     setcookie("analytics_disable", FALSE, time() - 3600, '/');
     foreach (array_filter($cookie_domains) as $domain) {
       setcookie("analytics_disable", TRUE, time() - 3600, '/', $domain);
