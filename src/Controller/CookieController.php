@@ -32,8 +32,7 @@ class CookieController extends ControllerBase {
    *
    * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
    */
-  public function __construct(KillSwitch $kill_switch)
-  {
+  public function __construct(KillSwitch $kill_switch) {
     $this->killSwitch = $kill_switch;
   }
 
@@ -43,7 +42,11 @@ class CookieController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
   public function setCookie() {
+    $cookie_domains = array_map('trim', explode("\n", $this->config('ga_disable.settings')->get('cookie_domains')));
     setcookie("analytics_disable", TRUE, 0, '/');
+    foreach (array_filter($cookie_domains) as $domain) {
+      setcookie("analytics_disable", TRUE, 0, '/', $domain);
+    }
     $this->messenger()->addStatus($this->t('The GA opt-out cookie has been set.'));
     $this->killSwitch->trigger();
     return $this->redirect('<front>');
@@ -55,9 +58,14 @@ class CookieController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
   public function removeCookie() {
+    $cookie_domains = array_map('trim', explode("\n", $this->config('ga_disable.settings')->get('cookie_domains')));
     setcookie("analytics_disable", FALSE, time() - 3600, '/');
+    foreach (array_filter($cookie_domains) as $domain) {
+      setcookie("analytics_disable", TRUE, time() - 3600, '/', $domain);
+    }
     $this->messenger()->addStatus($this->t('The GA opt-out cookie has been removed.'));
     $this->killSwitch->trigger();
     return $this->redirect('<front>');
   }
+
 }
