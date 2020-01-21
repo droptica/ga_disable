@@ -47,7 +47,6 @@ class CookieController extends ControllerBase {
     foreach (array_filter($cookie_domains) as $domain) {
       setcookie("analytics_disable", TRUE, 0, '/', $domain);
     }
-    $this->messenger()->addStatus($this->t('The GA opt-out cookie has been set.'));
     $this->killSwitch->trigger();
     return $this->redirect('<front>');
   }
@@ -63,7 +62,6 @@ class CookieController extends ControllerBase {
     foreach (array_filter($cookie_domains) as $domain) {
       setcookie("analytics_disable", TRUE, time() - 3600, '/', $domain);
     }
-    $this->messenger()->addStatus($this->t('The GA opt-out cookie has been removed.'));
     $this->killSwitch->trigger();
     return $this->redirect('<front>');
   }
