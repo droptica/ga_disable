@@ -20,6 +20,8 @@ function ga_disable_page_attachments(array &$page) {
     $force = '1';
   }
 
+  $module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'ga_disable');
+
   // Add JS above all scripts.
   $page['#attached']['html_head'][] = [
     [
@@ -27,7 +29,7 @@ function ga_disable_page_attachments(array &$page) {
       '#weight' => -100,
       '#tag' => 'script',
       '#attributes' => [
-        'src' => base_path() . drupal_get_path('module', 'ga_disable') . '/js/ga_disable.js',
+        'src' => base_path() . $module_path . '/js/ga_disable.js',
         'data-id' => $ga_id,
         'data-force' => $force,
         'id' => 'ga_disable',
